@@ -187,7 +187,7 @@ def learn(env,
     mean_episode_reward      = -float('nan')
     best_mean_episode_reward = -float('inf')
     last_obs = env.reset()
-    LOG_EVERY_N_STEPS = 1
+    LOG_EVERY_N_STEPS = 10000
 
     for t in itertools.count():
         ### 1. Check stopping criterion
