@@ -189,7 +189,7 @@ def learn(env,
     last_obs = env.reset()
     LOG_EVERY_N_STEPS = 10000
     outF = open('output', 'a')
-    outF.write('timestep;reward\n')
+    outF.write('timestep; mreward;breward\n')
     outF.close()
 
     for t in itertools.count():
@@ -335,7 +335,7 @@ def learn(env,
             best_mean_episode_reward = max(best_mean_episode_reward, mean_episode_reward)
         if t % LOG_EVERY_N_STEPS == 0 and model_initialized:
             outF = open('output', 'a')
-            outF.write(str(t)+';'+str(mean_episode_reward)+'\n')
+            outF.write(str(t)+';'+str(mean_episode_reward)+';'+str(best_mean_episode_reward)+'\n')
             outF.close()
             print("Timestep %d" % (t,))
             print("mean reward (100 episodes) %f" % mean_episode_reward)
