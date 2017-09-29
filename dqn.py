@@ -24,6 +24,7 @@ def build_mlp(
     with tf.variable_scope(scope,reuse=reuse):
         hidden = activation(input_placeholder)
         for i in range(n_layers):
+            print("test")
             hidden = activation(tf.layers.dense(hidden, units=size))
         output = tf.layers.dense(hidden, units=output_size, activation=output_activation)
 
