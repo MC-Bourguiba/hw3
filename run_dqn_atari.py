@@ -30,7 +30,7 @@ def atari_model(img_in, num_actions, scope, reuse=False):
 
 def atari_learn(env,
                 session,
-                num_timesteps):
+                num_timesteps,task_id):
     # This is just a rough estimate
     num_iterations = float(num_timesteps) / 4.0
 
@@ -65,6 +65,8 @@ def atari_learn(env,
         q_func=atari_model,
         optimizer_spec=optimizer,
         session=session,
+        task_id=task_id,
+        nn_size=3,
         exploration=exploration_schedule,
         stopping_criterion=stopping_criterion,
         replay_buffer_size=1000000,
@@ -75,6 +77,7 @@ def atari_learn(env,
         frame_history_len=4,
         target_update_freq=10000,
         grad_norm_clipping=10
+
     )
     env.close()
 
@@ -122,12 +125,14 @@ def main():
 
     # Change the index to select a different game.
     task = benchmark.tasks[3]
+    print ('^^^^^task^^^^^^',task.env_id)
 
     # Run training
     seed = 0 # Use a seed of zero (you may want to randomize the seed!)
     env = get_env(task, seed)
+
     session = get_session()
-    atari_learn(env, session, num_timesteps=task.max_timesteps)
+    atari_learn(env, session, num_timesteps=task.max_timesteps,task_id=task.env_id)
 
 if __name__ == "__main__":
     main()

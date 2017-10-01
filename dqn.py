@@ -10,34 +10,14 @@ from dqn_utils import *
 
 OptimizerSpec = namedtuple("OptimizerSpec", ["constructor", "kwargs", "lr_schedule"])
 
-def build_mlp(
-        input_placeholder,
-        output_size,
-        scope,
-        n_layers=2,
-        size=64,
-        activation=tf.tanh,
-        output_activation=None,
-        reuse=False
-        ):
 
-    with tf.variable_scope(scope,reuse=reuse):
-        hidden = activation(input_placeholder)
-        for i in range(n_layers):
-            print("test")
-            hidden = activation(tf.layers.dense(hidden, units=size))
-        output = tf.layers.dense(hidden, units=output_size, activation=output_activation)
-
-        return output
-
-
-def q_func(img_in, num_actions, scope, reuse):
-    return build_mlp(input_placeholder=img_in, output_size=num_actions, scope=scope, reuse=reuse)
 
 def learn(env,
           q_func,
           optimizer_spec,
           session,
+          task_id,
+          nn_size,
           exploration=LinearSchedule(1000000, 0.1),
           stopping_criterion=None,
           replay_buffer_size=1000000,
@@ -47,7 +27,8 @@ def learn(env,
           learning_freq=4,
           frame_history_len=4,
           target_update_freq=10000,
-          grad_norm_clipping=10):
+          grad_norm_clipping=10
+         ):
     """Run Deep Q-learning algorithm.
 
     You can specify your own convnet using q_func.
@@ -189,7 +170,7 @@ def learn(env,
     best_mean_episode_reward = -float('inf')
     last_obs = env.reset()
     LOG_EVERY_N_STEPS = 10000
-    outF = open('output', 'a')
+    outF = open('output'+str(task_id)+'nn'+str(nn_size), 'a')
     outF.write('timestep; mreward;breward\n')
     outF.close()
 
@@ -335,7 +316,7 @@ def learn(env,
         if len(episode_rewards) > 100:
             best_mean_episode_reward = max(best_mean_episode_reward, mean_episode_reward)
         if t % LOG_EVERY_N_STEPS == 0 and model_initialized:
-            outF = open('output', 'a')
+            outF = open('output'+str(task_id)+'nn'+str(nn_size), 'a')
             outF.write(str(t)+';'+str(mean_episode_reward)+';'+str(best_mean_episode_reward)+'\n')
             outF.close()
             print("Timestep %d" % (t,))
