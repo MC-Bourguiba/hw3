@@ -125,7 +125,7 @@ def main():
 
     # Change the index to select a different game.
     task = benchmark.tasks[3]
-    print ('^^^^^task^^^^^^',task.env_id)
+    print ('******task******',task.env_id)
 
     # Run training
     seed = 0 # Use a seed of zero (you may want to randomize the seed!)
